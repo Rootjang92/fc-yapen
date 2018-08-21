@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-yapen-payfinish',
@@ -15,40 +16,51 @@ import { Component, OnInit } from '@angular/core';
               <th scope="row">예약자 이름</th>
               <td>
                 <span>
-                  홍길동
+                  {{ mySubscriber }}
                 </span>
               </td>
             </tr>
             <!-- 예약자 이름 -->
 
-            <!-- 펜션 이름 -->
+            <!-- 예약기간 -->
             <tr>
-              <th scope="row">펜션 이름</th>
+              <th scope="row">예약 기간</th>
               <td>
                 <span>
-                  가평 폴라리스펜션[17.11월리모델링]
+                  {{ myStayNum }}
                 </span>
               </td>
             </tr>
-            <!-- 펜션 이름 -->
+            <!-- 예약기간 -->
 
-            <!-- 방 이름 -->
+            <!-- 예약 날짜 -->
             <tr>
-              <th scope="row">방 이름</th>
+              <th scope="row">예약 날짜</th>
               <td>
                 <span>
-                  스콜피오(전갈자리)
+                  {{ myCheckInDate }}
                 </span>
               </td>
             </tr>
-            <!-- 방 이름 -->
+            <!-- 예약 날짜 -->
+
+            <!-- 결제수단 -->
+            <tr>
+              <th scope="row">결제수단</th>
+              <td>
+                <span>
+                  {{ myPayType }}
+                </span>
+              </td>
+            </tr>
+            <!-- 결제수단 -->
 
             <!-- 결제금액 -->
             <tr>
               <th scope="row">결제금액</th>
               <td>
                 <span>
-                  400000원
+                  {{ myTotalPrice }}
                 </span>
               </td>
             </tr>
@@ -71,6 +83,7 @@ import { Component, OnInit } from '@angular/core';
     }
     .payment-info th{
       background: #f7f7f7;
+      width: 20%;
     }
     .header-table{
       font-size: 16px;
@@ -81,9 +94,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class YapenPayfinishComponent implements OnInit {
 
-  constructor() { }
+  urlPay = '​https://api.pmb.kr/reservation/pay/​';
+
+  mySubscriber;
+  myStayNum;
+  myCheckInDate;
+  myPayType;
+  myTotalPrice;
+
+  constructor(private http: HttpClient) {
+
+   }
 
   ngOnInit() {
+    this.http.get(this.urlPay)
+      .subscribe(myInfo => {
+        // this.mySubscriber = myInfo.subscriber // "maro's_friends"
+        // this.myStayNum = myInfo.stay_day_num // 2
+        // this.myCheckInDate = myInfo.checkin_date // "2018-08-22"
+        // this.myPayType = myInfo.method_of_payment // "카드간편결제"
+        // this.myTotalPrice = myInfo.total_price // 4000000
+      });
   }
+
 
 }
