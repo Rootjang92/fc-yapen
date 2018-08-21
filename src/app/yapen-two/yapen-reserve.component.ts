@@ -38,6 +38,7 @@ interface Room {
 
         <app-yapen-calendar
         (changeDate)="onDateSelection($event)"
+        [selectedDate]="selectedDate"
         ></app-yapen-calendar>
 
       </section>
@@ -121,8 +122,8 @@ interface Room {
             <td>
 
               <!-- for period -->
-              <div class="input-group mb-3">
-                <select class="custom-select" [attr.id]="room.pk" class="selectStayBox"
+              <div class="stay-div">
+                <select class="stay-select" [attr.id]="room.pk" class="selectStayBox"
                 [disabled]="!(room.pk===checkedPk)" [class.disabled-select]="!(room.pk===checkedPk)"
                 (change)="selectPeriod($event.target.value)" #selectStayNum>
                 <ng-container *range="[1, 6] let stayNum;">
@@ -136,8 +137,9 @@ interface Room {
             <td>
 
               <!-- the number of people for each room -->
-              <span>성인:
-                <select class="custom-select" [attr.id]="room.pk"
+              <span class="adult-span">
+                성인
+                <select class="adult-select" [attr.id]="room.pk"
                   [disabled]="!(room.pk===checkedPk)" [class.disabled-select]="!(room.pk===checkedPk)"
                   (change)="selectAdult($event.target.value)" #selectAdultNum>
                 <ng-container *range="[room.normal_num_poeple, room.max_num_people]; let adultNum">
@@ -146,8 +148,9 @@ interface Room {
                 </select>
               </span>
 
-              <span> 아동:
-                <select class="custom-select" [attr.id]="room.pk"
+              <span class="child-span">
+                아동
+                <select class="child-select" [attr.id]="room.pk"
                   [disabled]="!(room.pk===checkedPk)" [class.disabled-select]="!(room.pk===checkedPk)"
                   (change)="selectChild($event.target.value)" #selectChildNum>
                 <ng-container *range="[0, room.max_num_people]; let childNum">
@@ -156,8 +159,9 @@ interface Room {
                 </select>
               </span>
 
-              <span> 유아:
-                <select class="custom-select" [attr.id]="room.pk"
+              <span class="baby-span">
+                유아
+                <select class="baby-select" [attr.id]="room.pk"
                   [disabled]="!(room.pk===checkedPk)" [class.disabled-select]="!(room.pk===checkedPk)"
                   (change)="selectBaby($event.target.value)" #selectBabyNum>
                   <ng-container *range="[0, room.max_num_people]; let babyNum">
@@ -211,7 +215,7 @@ interface Room {
     .reserve-page{
       margin: 0;
       padding: 0;
-      line-height: 1.3;
+      line-height: 3;
       font-size: 12px;
       font-family: dotum, 맑은 고딕, "Malgun Gothic", "맑은 고딕", Tahoma, Geneva, sans-serif;
       word-break: break-all;
@@ -284,6 +288,24 @@ interface Room {
     }
     .selectStayBox{
       margin-left: 10px;
+    }
+    .stay-div{
+      text-align: center;
+    }
+    .adult-span{
+      margin-right: 10px;
+    }
+    .adult-select{
+      width: 75px;
+    }
+    .child-select{
+      width: 75px;
+    }
+    .baby-span{
+      margin-left: 10px;
+    }
+    .baby-select{
+      width: 75px;
     }
     .total-price{
       padding: 29px 15px 0 0;
