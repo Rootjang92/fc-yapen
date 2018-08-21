@@ -4,10 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Router } from '../../../node_modules/@angular/router';
 
-interface Login {
-  username: string;
-  password: string;
-}
 
 interface Token {
   token: string;
@@ -20,12 +16,18 @@ interface Token {
     <div class="popup">
     <div id="logintext"> Login </div><br>
     <form [formGroup]="loginForm" class="loginsession" (ngSubmit)="login()" novalidate>
-        <input class="id" type="text" placeholder="이메일 아이디" formControlName="username"><br>
-        <input class="pw" type="password" placeholder="비밀번호" formControlName="password"><br>
+        <input class="id" type="text"
+        [(ngModel)]="username"
+        placeholder="이메일 아이디" formControlName="username"
+        ><br>
+        <input class="pw" type="password"
+        [(ngModel)]="password"
+        placeholder="비밀번호" formControlName="password"><br>
         <button class="login" type="submit">야놀자펜션 로그인</button><br>
     </form>
       <div id="user">
-        <a routerLink="/signup" (click)="ok()">회원가입</a> | <span>비밀번호 찾기</span>
+        <a routerLink="/signup" (click)="ok()">회원가입</a> |
+        <a routerLink="/main" (click)="logout()">로그아웃</a>
       </div>
 
       <button class="close-btn"
@@ -95,9 +97,11 @@ interface Token {
 })
 
 export class YapenLoginComponent implements OnInit {
-  // url = 'http://localhost:3000/token';
   loginForm: FormGroup;
   url = 'https://api.pmb.kr/members/login/';
+  token = '';
+  username = '';
+  password = '';
 
   constructor(
     public http: HttpClient,
@@ -106,14 +110,14 @@ export class YapenLoginComponent implements OnInit {
   ) {}
 
   @Input() closable = true;
-  // visible(two-way binding)
   @Input() visible: boolean;
-  // visible change event
   @Output() visibleChange = new EventEmitter<boolean>();
 
   ok(value) {
     this.visible = false;
     this.visibleChange.emit(this.visible);
+    this.username = '';
+    this.password = '';
   }
 
   close() {
@@ -128,10 +132,26 @@ export class YapenLoginComponent implements OnInit {
         alert('로그인이 성공.');
         this.ok(false);
         this.router.navigate(['/main']);
+        localStorage.setItem('key', data.token);
+        this.token = localStorage.getItem('key');
+        console.log(this.token);
       },
       error => {
         alert('로그인에 실패하였습니다.');
       });
+  }
+
+  logout() {
+    if (this.token === null || this.token === '') {
+        alert('로그인 상태가 아닙니다.');
+        return;
+    }
+    alert('로그아웃 되었습니다.');
+    this.ok(false);
+    this.router.navigate(['/main']);
+    localStorage.removeItem('key');
+    this.token = localStorage.getItem('key');
+    console.log(this.token);
   }
 
   ngOnInit() {
@@ -143,13 +163,15 @@ export class YapenLoginComponent implements OnInit {
           Validators.required
         ]]
   });
+  this.token = localStorage.getItem('key');
+  console.log(this.token);
 }
 
-  private loginRequest(): Observable<Login> {
+  private loginRequest(): Observable<Token> {
     const payload = {
       username: this.loginForm.value.username,
       password: this.loginForm.value.password
     };
-    return this.http.post<Login>(this.url, payload);
+    return this.http.post<Token>(this.url, payload);
   }
 }
