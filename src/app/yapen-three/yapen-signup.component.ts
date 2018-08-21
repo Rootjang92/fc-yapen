@@ -6,7 +6,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { PasswordValidator } from './password-validator';
 
-interface Signup {
+export interface Signup {
   username: string;
   password: string;
   password2: string;
