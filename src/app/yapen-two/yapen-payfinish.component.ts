@@ -3,10 +3,10 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-yapen-payfinish',
   template: `
-    <div>
-      <h2>결제가 완료되었습니다!</h2>
+    <div class="pay-finish-page">
+      <h2 class="header">결제가 완료되었습니다!</h2>
       <section class="payment-info">
-        <h3>결제 정보</h3>
+        <h3 class="header-table">결제 정보</h3>
         <table class="table table-bordered">
           <tbody>
 
@@ -59,7 +59,25 @@ import { Component, OnInit } from '@angular/core';
       </section>
     </div>
   `,
-  styles: []
+  styles: [`
+    .pay-finish-page{
+      margin: 20px 20px 20px 20px;
+    }
+    .header{
+      text-align: center;
+    }
+    .payment-info{
+      margin-top: 30px;
+    }
+    .payment-info th{
+      background: #f7f7f7;
+    }
+    .header-table{
+      font-size: 16px;
+      color: #ff6559;
+      font-weight: bold;
+    }
+  `]
 })
 export class YapenPayfinishComponent implements OnInit {
 
