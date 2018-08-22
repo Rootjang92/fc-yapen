@@ -34,7 +34,7 @@ import { RangeDirective } from './range.directive';
 
 const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
-  { path: 'main', component: YapenContainerComponent},
+  { path: 'main', component: YapenPensionlistComponent},
   { path: 'pensionlist', component: YapenPensionlistComponent},
   { path: 'pensiondetail', component: YapenPensiondetailComponent},
   { path: 'reserve/:pk/:date', component: YapenReserveComponent},
