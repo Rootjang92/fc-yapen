@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 
 interface Area {
   name: string;
@@ -24,9 +25,15 @@ export class YapenSearchbarComponent {
   resid = '1.001010';
   people = '전체';
   peoplePercent = 0;
+  seletedDate: NgbDateStruct;
 
-  constructor() {
+  constructor(calendar: NgbCalendar) {
+    // this.seletedDate = calendar.getToday();
    }
+
+  //  seletedate() {
+  //    console.log(this.seletedDate);
+  //  }
 
    changeArea(area: Area) {
      this.res = area.name;
