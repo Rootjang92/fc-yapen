@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-yapen-searchbar',
@@ -16,12 +17,16 @@ export class YapenSearchbarComponent {
   res = '양평';
   people = '전체';
   peoplePercent = 0;
+  seletedDate: NgbDateStruct;
 
-  constructor() {
+  constructor(calendar: NgbCalendar) {
+    // this.seletedDate = calendar.getToday();
    }
 
-   changeArea(area: string) {
-     this.res = area;
+
+   changeArea(area: Area) {
+     this.res = area.name;
+     this.resid = area.sub_location_no;
    }
 
    changePeople(peo: string) {

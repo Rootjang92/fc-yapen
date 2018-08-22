@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, filter, scan, tap } from 'rxjs/operators';
 import { forEach } from '@angular/router/src/utils/collection';
+import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-condition',
@@ -20,9 +21,9 @@ import { forEach } from '@angular/router/src/utils/collection';
     </li>
     <li style="width:250px" (click)="toggle()">
       <img src="../assets/glyphicons_free/glyphicons/png/glyphicons-46-calendar.png" alt="날짜" class="first-img">
-      <div id="schStartDateText">2018/07/30 (1박 2일)</div>
-      <input type="hidden" name="schStartDate" id="schStartDate" value="2018/07/30">
-      <input type="hidden" name="schEndDate" id="schEndDate" value="2018/07/31">
+      <div id="schStartDateText">{{ seledtedDate }}}</div>
+      <input type="hidden" name="schStartDate" id="schStartDate" [value]="">
+      <input type="hidden" name="schEndDate" id="schEndDate" value="">
       <img src="../assets/glyphicons_free/glyphicons/png/glyphicons-602-chevron-down.png" alt="펼치기/닫기" class="arrowToggle last-img">
     </li>
     <li style="width:260px" (click)="toggle('people')">
@@ -48,11 +49,15 @@ import { forEach } from '@angular/router/src/utils/collection';
 export class ConditionComponent {
   @Input() res: string;
   @Input() people = '전체';
+  @Input() seledtedDate;
+  location = [];
+
 
   url = 'https://api.pmb.kr/location/location-name';
 
   constructor(public stateviewService: StateviewService,
-              private http: HttpClient) { }
+              private http: HttpClient,
+              calendar: NgbCalendar) { }
 
   toggle(state: string) {
     if (this.stateviewService.state === state) {
