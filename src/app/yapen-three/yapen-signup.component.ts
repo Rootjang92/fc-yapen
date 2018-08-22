@@ -19,7 +19,7 @@ export interface Signup {
   template: `
   <ng-container *ngIf="visible2">
   <div class="popup">
-  <h3> 회원가입 </h3>
+  <div class="signuptext"> 회원가입 </div><br>
     <form [formGroup]="signupForm" (ngSubmit)="signUp()" novalidate>
       <input class="username" type="email" placement="right" placeholder="이메일을 입력해주세요" formControlName="username"><br>
         <div class="alert-box">
@@ -64,6 +64,10 @@ export interface Signup {
       display: inline;
     }
 
+    .signuptext {
+      color: #FF6464;
+      font-size: 20px;
+    }
     #signup {
       background: #FF6464;
       color: #fff;

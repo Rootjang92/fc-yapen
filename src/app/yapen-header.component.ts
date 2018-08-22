@@ -33,7 +33,7 @@ import { Router } from '../../node_modules/@angular/router';
     position: relative;
     text-align: center;
     width: 1220px;
-    margin: 0px auto;
+    margin: 50px auto;
 }`
   ]
 })
@@ -60,7 +60,6 @@ export class YapenHeaderComponent {
   loginView(event) {
     localStorage.setItem('key', event);
     this.token = localStorage.getItem('key');
-    console.log(event);
   }
 
 }

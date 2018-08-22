@@ -14,7 +14,7 @@ interface Token {
   template: `
   <ng-container *ngIf="visible">
     <div class="popup">
-    <div id="logintext"> Login </div><br>
+    <div id="logintext"> 로그인 </div><br>
     <form [formGroup]="loginForm" class="loginsession" (ngSubmit)="login()" novalidate>
         <input class="id" type="text"
         [(ngModel)]="username"
@@ -53,10 +53,12 @@ interface Token {
 
     #logintext {
       color: #FF6464;
+      font-size: 20px;
     }
 
     #user {
       color: blue;
+      display: none;
     }
 
     .popup {
@@ -133,7 +135,6 @@ export class YapenLoginComponent implements OnInit {
       data => {
         alert('로그인이 성공.');
         this.ok(false);
-        this.router.navigate(['/main']);
         localStorage.setItem('key', data.token);
         this.token = localStorage.getItem('key');
         console.log(this.token);
