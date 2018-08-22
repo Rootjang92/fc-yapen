@@ -6,7 +6,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { PasswordValidator } from './password-validator';
 
-interface Signup {
+export interface Signup {
   username: string;
   password: string;
   password2: string;
@@ -71,7 +71,7 @@ export class YapenSignupComponent implements OnInit {
   signup: Signup[];
   signupForm: FormGroup;
  // url = 'http://localhost:3000/signups';
-  url = 'https://pmb.kr/members/signup/';
+  url = 'https://api.pmb.kr/members/signup/';
 
 
   constructor(

@@ -38,6 +38,7 @@ interface Room {
 
         <app-yapen-calendar
         (changeDate)="onDateSelection($event)"
+        [selectedDate]="selectedDate"
         ></app-yapen-calendar>
 
       </section>
@@ -121,8 +122,8 @@ interface Room {
             <td>
 
               <!-- for period -->
-              <div class="input-group mb-3">
-                <select class="custom-select" [attr.id]="room.pk" class="selectStayBox"
+              <div class="stay-div">
+                <select class="stay-select" [attr.id]="room.pk" class="selectStayBox"
                 [disabled]="!(room.pk===checkedPk)" [class.disabled-select]="!(room.pk===checkedPk)"
                 (change)="selectPeriod($event.target.value)" #selectStayNum>
                 <ng-container *range="[1, 6] let stayNum;">
@@ -136,8 +137,9 @@ interface Room {
             <td>
 
               <!-- the number of people for each room -->
-              <span>성인:
-                <select class="custom-select" [attr.id]="room.pk"
+              <span class="adult-span">
+                성인
+                <select class="adult-select" [attr.id]="room.pk"
                   [disabled]="!(room.pk===checkedPk)" [class.disabled-select]="!(room.pk===checkedPk)"
                   (change)="selectAdult($event.target.value)" #selectAdultNum>
                 <ng-container *range="[room.normal_num_poeple, room.max_num_people]; let adultNum">
@@ -146,8 +148,9 @@ interface Room {
                 </select>
               </span>
 
-              <span> 아동:
-                <select class="custom-select" [attr.id]="room.pk"
+              <span class="child-span">
+                아동
+                <select class="child-select" [attr.id]="room.pk"
                   [disabled]="!(room.pk===checkedPk)" [class.disabled-select]="!(room.pk===checkedPk)"
                   (change)="selectChild($event.target.value)" #selectChildNum>
                 <ng-container *range="[0, room.max_num_people]; let childNum">
@@ -156,8 +159,9 @@ interface Room {
                 </select>
               </span>
 
-              <span> 유아:
-                <select class="custom-select" [attr.id]="room.pk"
+              <span class="baby-span">
+                유아
+                <select class="baby-select" [attr.id]="room.pk"
                   [disabled]="!(room.pk===checkedPk)" [class.disabled-select]="!(room.pk===checkedPk)"
                   (change)="selectBaby($event.target.value)" #selectBabyNum>
                   <ng-container *range="[0, room.max_num_people]; let babyNum">
@@ -169,7 +173,9 @@ interface Room {
 
             </td>
             <td class="basic-price">{{ room.price }}원</td>
-            <td>{{ room.price }}원</td>
+            <td>{{ room.price * ( room.pk === this.checkedPk ? this.stayDayNum : 1 ) }}원</td>
+
+            <!-- ( room.pk === this.checkedPk ? this.stayDayNum : 1 ) -->
 
 
           </tr>
@@ -211,7 +217,7 @@ interface Room {
     .reserve-page{
       margin: 0;
       padding: 0;
-      line-height: 1.3;
+      line-height: 3;
       font-size: 12px;
       font-family: dotum, 맑은 고딕, "Malgun Gothic", "맑은 고딕", Tahoma, Geneva, sans-serif;
       word-break: break-all;
@@ -285,6 +291,24 @@ interface Room {
     .selectStayBox{
       margin-left: 10px;
     }
+    .stay-div{
+      text-align: center;
+    }
+    .adult-span{
+      margin-right: 10px;
+    }
+    .adult-select{
+      width: 75px;
+    }
+    .child-select{
+      width: 75px;
+    }
+    .baby-span{
+      margin-left: 10px;
+    }
+    .baby-select{
+      width: 75px;
+    }
     .total-price{
       padding: 29px 15px 0 0;
       text-align: right;
@@ -334,23 +358,23 @@ export class YapenReserveComponent implements OnInit {
 
   rooms: Room[];
 
-  urlDate = 'https://www.pmb.kr/reservation';
+  urlDate = 'https://api.pmb.kr/reservation';
 
-  urlInfo: 'https://www.pmb.kr/reservation/info';
+  urlInfo = 'https://api.pmb.kr/reservation/info/';
 
-  checkedPk: number = 1;
+  checkedPk = 1;
 
-  stayDayNum: number = 1;
+  stayDayNum = 1;
 
   adultNum: number;
 
-  childNum: number = 0;
+  childNum = 0;
 
-  babyNum: number = 0;
+  babyNum = 0;
 
-  totalPrice: number = 0;
+  totalPrice = 0;
 
-  extraChargeTotal: number = 0;
+  extraChargeTotal = 0;
 
   pensionName: string;
 
@@ -514,7 +538,6 @@ export class YapenReserveComponent implements OnInit {
   }
 
   findRoomStatus(eachDate) {
-    console.log('findRoomStatus');
     this.http.get<Pension>(`${this.urlDate}/${this.pensionPk}/${eachDate}/`)
     .subscribe(pension => {
       const checkedRoom = this.rooms.filter(room => room.pk === this.checkedPk)[0];
@@ -525,7 +548,6 @@ export class YapenReserveComponent implements OnInit {
           if (!room.status) {
             return window.alert('이미 다른분이 예약하셨습니다!');
           } else {
-            console.log('true');
             this.getNextDay(this.dateDay);
           }
         }
@@ -534,36 +556,39 @@ export class YapenReserveComponent implements OnInit {
   }
 
   postReserveRoom() {
-    console.log('post');
-          // 1. post data to databse
+      const checkedRoom = this.rooms.filter(room => room.pk === this.checkedPk)[0];
+      const finalCheckInDate = `${this.checkInDate.year}-${this.checkInDate.month}-${this.checkInDate.day}`;
 
-      // const checkedRoom = this.rooms.filter(room => room.pk === this.checkedPk)[0];
-      // console.log(checkedRoom);
+      const newReserveRoom = {
+        pk: checkedRoom.pk,
+        checkin_date: finalCheckInDate,
+        stay_day_num: this.stayDayNum,
+        adult_num: this.adultNum,
+        child_num: this.childNum,
+        baby_num: this.babyNum,
+        total_price: this.totalPrice,
+        name: checkedRoom.name,
+        size: checkedRoom.size,
+        normal_num_poeple: checkedRoom.normal_num_poeple,
+        max_num_people: checkedRoom.max_num_people
+      };
 
-      // const finalCheckInDate = `${this.checkInDate.year}-${this.checkInDate.month}-${this.checkInDate.day}`;
-
-      // const newReserveRoom = {pk: checkedRoom.pk, checkin_date: finalCheckInDate, stay_day_num: this.stayDayNum,
-      //     adult_num: this.adultNum, child_num: this.childNum, baby_num: this.babyNum, total_price: this.totalPrice,
-      //     name: checkedRoom.name, size: checkedRoom.size, normal_num_poeple: checkedRoom.normal_num_poeple,
-      //     max_num_people: checkedRoom.max_num_people};
-      // console.log(newReserveRoom);
-      // this.http.post(this.urlInfo, newReserveRoom)
-      //   .subscribe(() => this.rooms = this.rooms);
-      // console.log(newReserveRoom);
-      //   alert('add!');
-
-      // 2. move to pay page
-      this.router.navigate(['pay']);
+      this.http.post(this.urlInfo, newReserveRoom)
+        .subscribe(
+          () => {
+            alert('예약이 성공했습니다.');
+            this.router.navigate(['pay']);
+          },
+          error => {
+            alert('예약이 실패되었습니다.');
+          }
+        );
     }
 
   // add a room selected to reservation database
   addReserveRoom() {
-    console.log('reserve');
-    // this.router.navigate(['pay']);
-    // 1. if checkedRoom.maxNumPeople < totalNum, then show alert!
     const checkedRoom = this.rooms.filter(room => room.pk === this.checkedPk)[0];
     const totalNum = Number(this.adultNum) + Number(this.childNum) + Number(this.babyNum);
-    console.log(totalNum);
 
     if (checkedRoom.max_num_people < totalNum) {
       return window.alert(`최대인원 ${checkedRoom.max_num_people}보다 초과되었습니다. 다시 입력 바랍니다.`);

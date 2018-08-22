@@ -1,19 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 
-interface Area {
-  name: string;
-  pensions_length: number;
-  sub_location_no: string;
-}
-
 @Component({
   selector: 'app-yapen-searchbar',
   template: `
-  <app-condition [res]="res" [resid]="resid" [people]="people"></app-condition>
+  <app-condition [res]="res" [people]="people"></app-condition>
   <app-local (changeArea)="changeArea($event)"></app-local>
   <app-people (changePeople)="changePeople($event)" [peoplePercent]="peoplePercent"></app-people>
-  <app-searchcalendar></app-searchcalendar>
   <app-theme></app-theme>
   <!-- 클릭 후 서치바 추가하기. -->
   <!-- 달력 넣기-->
@@ -22,7 +15,6 @@ interface Area {
 })
 export class YapenSearchbarComponent {
   res = '양평';
-  resid = '1.001010';
   people = '전체';
   peoplePercent = 0;
   seletedDate: NgbDateStruct;
@@ -31,9 +23,6 @@ export class YapenSearchbarComponent {
     // this.seletedDate = calendar.getToday();
    }
 
-  //  seletedate() {
-  //    console.log(this.seletedDate);
-  //  }
 
    changeArea(area: Area) {
      this.res = area.name;
