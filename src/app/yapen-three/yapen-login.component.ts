@@ -23,11 +23,10 @@ interface Token {
         <input class="pw" type="password"
         [(ngModel)]="password"
         placeholder="비밀번호" formControlName="password"><br>
-        <button class="login" type="submit">야놀자펜션 로그인</button><br>
+        <button class="login" type="submit" (click)="loginView.emit()" >야놀자펜션 로그인</button><br>
     </form>
       <div id="user">
-        <a routerLink="/signup" (click)="ok()">회원가입</a> |
-        <a routerLink="/main" (click)="logout()">로그아웃</a>
+        <a routerLink="/signup" (click)="ok()">회원가입</a>
       </div>
 
       <button class="close-btn"
@@ -112,6 +111,7 @@ export class YapenLoginComponent implements OnInit {
   @Input() closable = true;
   @Input() visible: boolean;
   @Output() visibleChange = new EventEmitter<boolean>();
+  @Output() loginView = new EventEmitter<Token>();
 
   ok(value) {
     this.visible = false;
@@ -123,6 +123,8 @@ export class YapenLoginComponent implements OnInit {
   close() {
     this.visible = false;
     this.visibleChange.emit(this.visible);
+    this.username = '';
+    this.password = '';
     // this.popupValueChange.emit('');
   }
 
@@ -139,19 +141,6 @@ export class YapenLoginComponent implements OnInit {
       error => {
         alert('로그인에 실패하였습니다.');
       });
-  }
-
-  logout() {
-    if (this.token === null || this.token === '') {
-        alert('로그인 상태가 아닙니다.');
-        return;
-    }
-    alert('로그아웃 되었습니다.');
-    this.ok(false);
-    this.router.navigate(['/main']);
-    localStorage.removeItem('key');
-    this.token = localStorage.getItem('key');
-    console.log(this.token);
   }
 
   ngOnInit() {
