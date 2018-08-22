@@ -173,7 +173,9 @@ interface Room {
 
             </td>
             <td class="basic-price">{{ room.price }}원</td>
-            <td>{{ room.price }}원</td>
+            <td>{{ room.price * ( room.pk === this.checkedPk ? this.stayDayNum : 1 ) }}원</td>
+
+            <!-- ( room.pk === this.checkedPk ? this.stayDayNum : 1 ) -->
 
 
           </tr>
