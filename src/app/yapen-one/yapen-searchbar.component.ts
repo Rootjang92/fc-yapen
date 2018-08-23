@@ -141,9 +141,11 @@ export class YapenSearchbarComponent {
       this.priceid = price.value;
     }
 
-    changeTheme(themes: string) {
-      this.themeid = themes;
-    }
+
+   changeTheme(themes: string) {
+     this.themeid = themes;
+   }
+
 
     changeArea(area: Area) {
       this.res = area.name;

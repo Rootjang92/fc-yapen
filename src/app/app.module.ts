@@ -38,6 +38,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
   { path: 'main', component: YapenPensionlistComponent},
   { path: 'pensionlist', component: YapenPensionlistComponent},
+  { path: 'roomlist', component: YapenRoomlistComponent},
   { path: 'pensiondetail', component: YapenPensiondetailComponent},
   { path: 'reserve/:pk/:date', component: YapenReserveComponent},
   { path: 'pay', component: YapenPayComponent},
