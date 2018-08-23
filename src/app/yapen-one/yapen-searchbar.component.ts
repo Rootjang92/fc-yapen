@@ -50,7 +50,7 @@ export class YapenSearchbarComponent {
   peoplePercent = 0;
   periodid = 1;
   priceid = 0;
-  themeid = '스파/월풀';
+  themeid: string;
   @Output() stayDate;
   @Output() stayDatevalue;
   @Output() stayPeriod: any[];
@@ -141,7 +141,7 @@ export class YapenSearchbarComponent {
    }
 
    changeTheme(themes: string) {
-     this.themeid = themes;
+     // this.themeid = themes;
    }
 
    changeArea(area: Area) {
@@ -175,13 +175,24 @@ export class YapenSearchbarComponent {
       this.setTheme = this.setTheme.map( t => t.value === value ? Object.assign({}, t, { checked: !t.checked}) : t);
     }
 
-    checkValueTheme(value: string, checked: boolean) {
-      this.themeid = this.setTheme.filter( t => t.checked );
+    checkValueTheme(value) {
+      console.log(value.checked);
+      this.setTheme = this.setTheme.map( t => {
+        if (t.value === value.value) {
+          return { ...t, checked: value.checked };
+        } else {
+          return t;
+        }
+      } );
+
+      const t = [];
+      this.setTheme.forEach(theme => {
+        if (theme.checked) {
+          t.push(theme.value);
+        }
+      });
+      console.log(t);
+      this.themeid = t.join(',');
       console.log(this.themeid);
     }
-
-
-  // checkTheme(value: string) {
-  //   console.log(value);
-  // }
 }
