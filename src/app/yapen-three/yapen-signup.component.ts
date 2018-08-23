@@ -169,6 +169,7 @@ export class YapenSignupComponent implements OnInit {
     .subscribe(
         data => {
           alert('회원가입이 완료되었습니다.');
+          this.ok(false);
           this.router.navigate(['/main']);
         },
         error => {
