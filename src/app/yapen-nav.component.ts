@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StateviewService } from './yapen-one/stateview.service';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
 import { map, filter, scan, tap } from 'rxjs/operators';
 import { forEach } from '@angular/router/src/utils/collection';
 
