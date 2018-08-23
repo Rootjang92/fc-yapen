@@ -275,15 +275,16 @@ interface PayMent {
   </div>
   <!-- yapen pay page -->
 
-  <!--
-  <div>
+
+
     <app-yapen-payfinish
+      [style.display]=""
       [subscriber]="subscriber"
       [payType]="payType"
       >
     </app-yapen-payfinish>
-  </div>
-  -->
+
+
 
 
   `,
@@ -720,6 +721,7 @@ export class YapenPayComponent implements OnInit {
         data => {
           alert('결제가 성공했습니다.');
           this.router.navigate(['/payfinish']);
+          this.getPayInfo();
           // this.getResponse(payload)
           //   .subscribe(_data => {
           //     this.subscriber = _data.subscriber;
@@ -734,9 +736,16 @@ export class YapenPayComponent implements OnInit {
         }
       );
 
+
+
       // this.postFinal(newPayInfoCard);
 
       // return this.http.post<PayMent>(this.urlPay, newPayInfoCard);
+    }
+
+    getPayInfo() {
+      console.log('service');
+
     }
 
     postFinal(payload) {

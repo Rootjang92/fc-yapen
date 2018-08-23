@@ -22,6 +22,7 @@ export class StateviewService {
   queryUrl = '?search=';
   url = 'https://api.pmb.kr/location/location-name';
   location = [];
+
   constructor(private http: HttpClient) { }
 
   getLocation() {
