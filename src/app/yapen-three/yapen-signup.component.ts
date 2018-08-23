@@ -25,7 +25,7 @@ export interface Signup {
         <div class="alert-box">
           <em *ngIf="username.errors?.pattern"> email을 형식에 맞춰 입력해주세요! </em>
           <em *ngIf="username.errors?.required && username.touched"> email을 입력하세요! </em>
-          <em *ngIf="!username.valid"><br></em>
+          <em><br></em>
         </div>
       <input class="phone_number" type="tel" placement="right"  placeholder="전화번호를 입력해주세요" formControlName="phone_number"><br>
         <div class="alert-box">
@@ -33,7 +33,7 @@ export interface Signup {
           <em *ngIf="phone_number.errors?.minlength && !phone_number.errors?.pattern"> 핸드폰 번호는 10자 혹은 11자로 입력해주세요! </em>
           <em *ngIf="phone_number.errors?.maxlength && !phone_number.errors?.pattern"> 핸드폰 번호는 10자 혹은 11자로 입력해주세요! </em>
           <em *ngIf="phone_number.errors?.required && phone_number.touched"> 전화번호를 입력하세요! </em>
-          <em *ngIf="!phone_number.valid"><br></em>
+          <em><br></em>
         </div>
       <div formGroupName="passwordGroup">
       <input class="password" type="password" placement="right" placeholder="비밀번호를 입력해주세요" formControlName="password"><br>
@@ -42,12 +42,12 @@ export interface Signup {
           <em *ngIf="password.errors?.minlength && !password.errors?.pattern"> 비밀번호는 최소 8자리로 입력해주세요! </em>
           <em *ngIf="password.errors?.maxlength && !password.errors?.pattern"> 비밀번호는 최대 12자리로 입력해주세요! </em>
           <em *ngIf="password.errors?.required && password.touched"> 비밀번호를 입력하세요! </em>
-          <em *ngIf="!password.valid"><br></em>
+          <em><br></em>
         </div>
       <input class="password2" type="password" placement="right" placeholder="비밀번호를 한번 더 입력해주세요" formControlName="password2"><br>
       <div class="alert-box">
         <em *ngIf="passwordGroup.errors?.match && password2.touched"> 비밀번호가 일치하지 않습니다 ! </em>
-        <em *ngIf="!passwordGroup.valid"><br></em>
+        <em><br></em>
       </div>
       </div>
       <button type="submit" id="signup" [disabled]="signupForm.invalid">회원가입</button>
