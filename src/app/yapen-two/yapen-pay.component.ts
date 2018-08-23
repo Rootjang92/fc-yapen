@@ -401,7 +401,7 @@ export class YapenPayComponent implements OnInit {
 
   isBank = false;
 
-  subscriber;
+  subscriber = '';
   phoneNumber;
   depositBank = '선택';
   isEmptyDepositName = false;
@@ -717,7 +717,7 @@ export class YapenPayComponent implements OnInit {
 
       this.http.post<PayMent>(this.urlPay, newPayInfoCard, { headers })
       .subscribe(
-        () => {
+        data => {
           alert('결제가 성공했습니다.');
           this.router.navigate(['/payfinish']);
           // this.getResponse(payload)
@@ -725,6 +725,7 @@ export class YapenPayComponent implements OnInit {
           //     this.subscriber = _data.subscriber;
           //     console.log(this.subscriber);
           //   });
+          this.subscriber = data.subscriber;
         },
         error => {
           alert('결제가 실패했습니다.');
