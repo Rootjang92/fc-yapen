@@ -30,8 +30,9 @@ export class YapenPayfinishComponent implements OnInit {
 
   urlPay = '​https://api.pmb.kr/reservation/pay/​';
 
-  @Input() subscriber;
+  @Input() subscriber: string;
   @Input() payType;
+
 
   // mySubscriber;
   // myStayNum;
