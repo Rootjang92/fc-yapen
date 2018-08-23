@@ -4,6 +4,7 @@ import { Router } from '../../node_modules/@angular/router';
 @Component({
   selector: 'app-yapen-header',
   template: `
+    <app-yapen-nav></app-yapen-nav>
     <app-yapen-login (loginView)="loginView($event)" [(visible)]="visible"></app-yapen-login>
     <app-yapen-signup [(visible2)]="visible2"></app-yapen-signup>
     <div class="yapenGuideHead">
