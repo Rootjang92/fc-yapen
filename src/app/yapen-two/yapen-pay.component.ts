@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -273,18 +273,39 @@ interface PayMent {
     <!-- pay button -->
 
   </div>
-  <!-- yapen pay page -->
+  <ng-container *ngIf="visible">
+  <div class="popup">
+  <div class="pay-finish-page">
+      <h2 class="header">결제가 완료되었습니다!</h2><br>
+      <section class="payment-info">
+        <h3 class="header-table">결제 정보</h3>
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <th scope="row">예약자 이름</th>
+              <td>
+                <span>
+                  {{ subscriber }}
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">결제 수단</th>
+              <td>
+                <span>
+                  {{ payType }}
+                </span>
+              </td>
+            </tr>
 
-  <!--
-  <div>
-    <app-yapen-payfinish
-      [subscriber]="subscriber"
-      [payType]="payType"
-      >
-    </app-yapen-payfinish>
-  </div>
-  -->
-
+          </tbody>
+        </table>
+      </section>
+    </div>
+    <button class="close-btn" (click)="close()">X</button>
+    </div>
+    <div class="overlay" (click)="close()"></div>
+    </ng-container>
 
   `,
   styles: [`
@@ -305,6 +326,7 @@ interface PayMent {
       font-size: 11px;
       color: #b2b2b2;
     }
+
     h2{
       font-size: 16px;
       color: #ff6559;
@@ -374,7 +396,56 @@ interface PayMent {
       color: #fff;
       border-color: white;
     }
-  `]
+
+    .header{
+      text-align: center;
+    }
+
+    .header-table{
+      font-size: 16px;
+      color: #ff6559;
+      font-weight: bold;
+    }
+
+    .payment-info th{
+      background: #f7f7f7;
+      width: 20%;
+    }
+
+    .popup {
+      position: fixed;
+      right: 0;
+      left: 0;
+      top: 20px;
+      margin: 0 auto;
+      width: 90%;
+      max-width: 550px;
+      min-height: 300px;
+      background-color: #fff;
+      padding: 12px;
+      box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2), 0 13px 19px 2px rgba(0, 0, 0, 0.14),
+                  0 5px 24px 4px rgba(0, 0, 0, 0.12);
+      z-index: 1000;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: 999;
+    }
+    .close-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      font-size: 16px;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }`
+  ]
 })
 export class YapenPayComponent implements OnInit {
 
@@ -430,6 +501,8 @@ export class YapenPayComponent implements OnInit {
   reserveRoomStayDayNum;
   reserveRoomTotalPrice;
 
+  visible = false;
+  closable = true;
   constructor(private fb: FormBuilder, private router: Router, private http: HttpClient) {
     this.creditFormDisplay = 'block';
     this.nonBankBookDisplay = 'none';
@@ -514,6 +587,15 @@ export class YapenPayComponent implements OnInit {
 
     get userName() {
       return this.userForm.get('userName');
+    }
+
+    ok() {
+      this.visible = !this.visible;
+    }
+
+    close() {
+      this.visible = false;
+      this.router.navigate(['/main']);
     }
 
     isDoubleEmpty() {
@@ -718,25 +800,14 @@ export class YapenPayComponent implements OnInit {
       this.http.post<PayMent>(this.urlPay, newPayInfoCard, { headers })
       .subscribe(
         data => {
-          alert('결제가 성공했습니다.');
-          this.router.navigate(['/payfinish']);
-          // this.getResponse(payload)
-          //   .subscribe(_data => {
-          //     this.subscriber = _data.subscriber;
-          //     console.log(this.subscriber);
-          //   });
           this.subscriber = data.subscriber;
+          console.log(localStorage.getItem('key'));
         },
         error => {
           alert('결제가 실패했습니다.');
-          console.log(this.urlInfo);
-          console.log({headers});
         }
       );
-
-      // this.postFinal(newPayInfoCard);
-
-      // return this.http.post<PayMent>(this.urlPay, newPayInfoCard);
+      this.ok();
     }
 
     postFinal(payload) {
