@@ -137,6 +137,7 @@ export class YapenLoginComponent implements OnInit {
       },
       error => {
         alert('로그인에 실패하였습니다.');
+        localStorage.clear();
       });
   }
 
