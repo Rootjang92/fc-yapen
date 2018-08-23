@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 import { map, filter, scan, tap } from 'rxjs/operators';
 import { forEach } from '@angular/router/src/utils/collection';
 import { MomentModule } from 'angular2-moment';
+import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+
 
 @Component({
   selector: 'app-condition',
@@ -21,9 +23,11 @@ import { MomentModule } from 'angular2-moment';
     </li>
     <li style="width:250px" (click)="toggle('calendar')">
       <img src="../assets/glyphicons_free/glyphicons/png/glyphicons-46-calendar.png" alt="날짜" class="first-img">
+
       <div id="schStartDateText">{{ searchDate() }} ({{ stayDate }})</div>
       <input type="hidden" name="schStartDate" id="schStartDate" [value]="searchDate()">
       <input type="hidden" name="schEndDate" id="schEndDate" [value]="getNextDate()">
+
       <img src="../assets/glyphicons_free/glyphicons/png/glyphicons-602-chevron-down.png" alt="펼치기/닫기" class="arrowToggle last-img">
     </li>
     <li style="width:260px" (click)="toggle('people')">
@@ -68,11 +72,9 @@ export class ConditionComponent implements OnInit {
   location = [];
 
 
-
-
-
   constructor(public stateviewService: StateviewService,
-              private http: HttpClient) { }
+              private http: HttpClient,
+              calendar: NgbCalendar) { }
 
   ngOnInit() {
     // this.date = this.seletedDate.day;

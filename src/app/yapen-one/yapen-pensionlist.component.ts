@@ -7,6 +7,7 @@ import { Subject} from 'rxjs/Subject';
 @Component({
   selector: 'app-yapen-pensionlist',
   template: `
+  <a [routerLink]="['/reserve/', 1, '2018-08-19']">reserve</a><br>
   <main class="yapenMaincontainer" style="background-color: #f4f4f4;">
     <div class="yapenMainLayer">
       <div class="yapenMaintitle">추천 펜션</div>

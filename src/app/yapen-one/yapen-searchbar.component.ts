@@ -1,3 +1,4 @@
+
 import { Component, OnInit, Output, setTestabilityGetter } from '@angular/core';
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 
@@ -47,6 +48,7 @@ export class YapenSearchbarComponent {
   resid = '1.001010';
   people: any = '전체';
   peoplePercent = 0;
+
   periodid = 1;
   priceid = 0;
   themeid = '스파/월풀';
@@ -142,6 +144,7 @@ export class YapenSearchbarComponent {
    changeTheme(themes: string) {
      this.themeid = themes;
    }
+  seletedDate: NgbDateStruct;
 
    changeArea(area: Area) {
      this.res = area.name;

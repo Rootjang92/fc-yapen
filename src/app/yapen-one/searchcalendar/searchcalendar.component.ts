@@ -1,3 +1,4 @@
+
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { StateviewService } from '../stateview.service';
@@ -65,8 +66,8 @@ import {
   ]
 })
 export class SearchcalendarComponent implements OnInit {
-  stayid: number;
 
+  stayid: number;
   firstDayOfWeek = 7;
 
   selectedDate: NgbDateStruct;
@@ -74,6 +75,7 @@ export class SearchcalendarComponent implements OnInit {
   checkInDate: NgbDateStruct;
 
   today: Date = new Date();
+
   @Input() stayDate = new EventEmitter();
   @Input() stayPeriod;
   @Input() periodid: number;
@@ -83,8 +85,9 @@ export class SearchcalendarComponent implements OnInit {
   @Output() changeStayDate = new EventEmitter();
 
   constructor(public stateviewService: StateviewService,
-              private http: HttpClient) { }
-
+              private http: HttpClient,
+              calendar: NgbCalendar) {}
+              // { this.selectedDate = calendar.getToday(); }
   ngOnInit() {
   }
 
@@ -111,8 +114,5 @@ export class SearchcalendarComponent implements OnInit {
   //   this.checkInDate = date;
   // }
 
-  // stayDate(value: number) {
-  //   console.log(value);
-  // }
 }
 

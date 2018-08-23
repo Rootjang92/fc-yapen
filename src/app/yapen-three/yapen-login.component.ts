@@ -14,7 +14,7 @@ interface Token {
   template: `
   <ng-container *ngIf="visible">
     <div class="popup">
-    <div id="logintext"> Login </div><br>
+    <div id="logintext"> 로그인 </div><br>
     <form [formGroup]="loginForm" class="loginsession" (ngSubmit)="login()" novalidate>
         <input class="id" type="text"
         [(ngModel)]="username"
@@ -23,11 +23,10 @@ interface Token {
         <input class="pw" type="password"
         [(ngModel)]="password"
         placeholder="비밀번호" formControlName="password"><br>
-        <button class="login" type="submit">야놀자펜션 로그인</button><br>
+        <button class="login" type="submit" (click)="loginView.emit()" >야놀자펜션 로그인</button><br>
     </form>
       <div id="user">
-        <a routerLink="/signup" (click)="ok()">회원가입</a> |
-        <a routerLink="/main" (click)="logout()">로그아웃</a>
+        <a routerLink="/signup" (click)="ok()">회원가입</a>
       </div>
 
       <button class="close-btn"
@@ -54,10 +53,12 @@ interface Token {
 
     #logintext {
       color: #FF6464;
+      font-size: 20px;
     }
 
     #user {
       color: blue;
+      display: none;
     }
 
     .popup {
@@ -112,6 +113,7 @@ export class YapenLoginComponent implements OnInit {
   @Input() closable = true;
   @Input() visible: boolean;
   @Output() visibleChange = new EventEmitter<boolean>();
+  @Output() loginView = new EventEmitter<Token>();
 
   ok(value) {
     this.visible = false;
@@ -123,6 +125,8 @@ export class YapenLoginComponent implements OnInit {
   close() {
     this.visible = false;
     this.visibleChange.emit(this.visible);
+    this.username = '';
+    this.password = '';
     // this.popupValueChange.emit('');
   }
 
@@ -131,7 +135,6 @@ export class YapenLoginComponent implements OnInit {
       data => {
         alert('로그인이 성공.');
         this.ok(false);
-        this.router.navigate(['/main']);
         localStorage.setItem('key', data.token);
         this.token = localStorage.getItem('key');
         console.log(this.token);
@@ -139,19 +142,6 @@ export class YapenLoginComponent implements OnInit {
       error => {
         alert('로그인에 실패하였습니다.');
       });
-  }
-
-  logout() {
-    if (this.token === null || this.token === '') {
-        alert('로그인 상태가 아닙니다.');
-        return;
-    }
-    alert('로그아웃 되었습니다.');
-    this.ok(false);
-    this.router.navigate(['/main']);
-    localStorage.removeItem('key');
-    this.token = localStorage.getItem('key');
-    console.log(this.token);
   }
 
   ngOnInit() {
