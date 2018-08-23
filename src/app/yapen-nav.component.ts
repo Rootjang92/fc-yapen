@@ -12,7 +12,7 @@ import { forEach } from '@angular/router/src/utils/collection';
   <div class="yapenGuideHead" style="width: 1260px; left: 43px;">
     <div class="navLayer">
       <ul class="nav justify-content-end">
-        <div class="nav-li">
+        <!--<div class="nav-li">
           <li class="nav-item">
             <a class="nav-link active" href="#">야놀자펜션</a>
           </li>
@@ -22,7 +22,7 @@ import { forEach } from '@angular/router/src/utils/collection';
           <li class="nav-item">
             <a class="nav-link" href="#">로그인</a>
           </li>
-        </div>
+        </div>-->
         <div class="searchbar">
           <img src="../assets/glyphicons_free/glyphicons/png/glyphicons-28-search.png" alt="지역" class="first-img">
           <input type="text" class="sbText" autocomplete="off" autocorrect="off"
