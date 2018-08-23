@@ -144,7 +144,6 @@ export class YapenSearchbarComponent {
    changeTheme(themes: string) {
      this.themeid = themes;
    }
-  seletedDate: NgbDateStruct;
 
   //  changeArea(area: Area) {
   //    this.res = area.name;

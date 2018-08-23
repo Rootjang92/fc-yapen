@@ -26,6 +26,8 @@ import { Router } from '../../node_modules/@angular/router';
         <a routerLink="/main">
           <img src="http://image2.yanolja.com/pension/new/yapen.png" alt="야놀자펜션" class="yapenLogo" /></a>
         </div>
+
+        <app-yapen-searchbar></app-yapen-searchbar>
     `,
   styles: [`
   .yapenHeader .topLayer {
