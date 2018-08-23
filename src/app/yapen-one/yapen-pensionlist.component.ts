@@ -17,11 +17,13 @@ import { Subject} from 'rxjs/Subject';
           <tr>
             <td onclick="mainTopBanner" data-id="{{ pension.pk }}"
                 *ngFor="let pension of stateviewService.pensionList">
+            <a [routerLink]="['/reserve', pension.pk ,'2018-08-23']">
               <img src="{{ pension.pension_image_thumbnail }}" alt="추천" class="pensionImg">
               <div class="pensionInfo">
                 <div class="pensionName">{{ pension.name }}</div>
                 <div class="pensionPrice">{{ pension.lowest_price }}</div>
               </div>
+            </a>
             </td>
           </tr>
         </tbody>
@@ -72,6 +74,3 @@ export class YapenPensionlistComponent implements OnInit {
 
 
 }
-
-
-

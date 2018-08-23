@@ -25,8 +25,8 @@ import { Router } from '../../node_modules/@angular/router';
   ]
 })
 export class YapenHeaderComponent {
-  @Input() visible: boolean = false;
-  @Input() visible2: boolean = false;
+  @Input() visible: boolean;
+  @Input() visible2: boolean;
 
   token = localStorage.getItem('key');
 

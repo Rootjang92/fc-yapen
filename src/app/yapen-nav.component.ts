@@ -29,7 +29,7 @@ import { Router } from '../../node_modules/@angular/router';
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" *ngIf="token" routerLink="/main" (click)="logout()" (click)="visible=!visible">
+            <a class="nav-link" *ngIf="token" routerLink="/main" (click)="logout()" (click)="visible=false">
               <img src="https://img.yapen.co.kr/pension/images/web/logout_text.png" alt="로그아웃" />
             </a>
           </li>
