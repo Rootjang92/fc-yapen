@@ -11,7 +11,6 @@ import { Router } from '../../node_modules/@angular/router';
       <input type="text" name="" style="display:none;" />
         <div class="topLayer">
           <app-yapen-nav></app-yapen-nav>
-
         </div>
     <app-yapen-searchbar></app-yapen-searchbar>
     `,
