@@ -113,7 +113,6 @@ interface Room {
                 <input type="checkbox" [attr.id]="room.pk" [checked]="room.pk===checkedPk"
                 (change)="changeRoom(room.pk, selectStayNum.value, selectAdultNum.value,
                   selectChildNum.value, selectBabyNum.value)" [disabled]="!room.status || room.pk===checkedPk">
-                  <!-- !room.status || room.pk===checkedPk -->
                   <label [attr.for]="room.pk">{{ room.name }}</label>
               </span>
             </td>
@@ -174,7 +173,8 @@ interface Room {
 
             </td>
             <td class="basic-price">{{ room.price }}원</td>
-            <td>{{ room.price * ( room.pk === this.checkedPk ? this.stayDayNum : 1 ) }}원</td>
+            <td>{{ room.price * ( room.pk === this.checkedPk ? this.stayDayNum : 1 ) +
+              ( room.pk === this.checkedPk ? extraChargeTotal : 0 ) }}원</td>
 
             <!-- ( room.pk === this.checkedPk ? this.stayDayNum : 1 ) -->
 
@@ -363,7 +363,7 @@ export class YapenReserveComponent implements OnInit {
 
   urlInfo = 'https://api.pmb.kr/reservation/info/';
 
-  checkedPk = 1;
+  checkedPk;
 
   stayDayNum = 1;
 
@@ -406,14 +406,16 @@ export class YapenReserveComponent implements OnInit {
     // for nested array -> rooms in pension
     this.http.get<Pension>(`${this.urlDate}/${this.pensionPk}/${this.initalDate}/`)
     .subscribe(pension => {
+      console.log(pension);
       this.pensionPk = pension.pk;
       this.pensionName = pension.name;
       this.pensionAddress = pension.address[0];
-      this.rooms = pension['rooms'];
+      this.rooms = pension['rooms']; // [{pk: 1, ....}, {pk: 2, ...}] -> rooms
 
-      const checkedRoom = this.rooms.filter(room => room.pk === this.checkedPk)[0];
+      const checkedRoom = this.rooms[0]; // {pk: 72, ....}
+      this.checkedPk = checkedRoom.pk;
+
       this.adultNum = checkedRoom.normal_num_poeple;
-
       this.totalPrice = checkedRoom.price;
       this.getExtraCharge();
   });
