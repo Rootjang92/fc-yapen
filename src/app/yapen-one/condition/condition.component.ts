@@ -92,15 +92,20 @@ export class ConditionComponent implements OnInit {
 
 
   searchDate() {
-    const dateS = `${this.seletedDate.year}-${this.seletedDate.month }-${ this.seletedDate.day }`;
-    // console.dir(this.seletedDate.day);
+    let zero = '';
+    const n = this.seletedDate.month;
+    const m = this.seletedDate.day;
+    if ( n < 10) {
+      zero += 0;
+    }
+    const dateS = `${this.seletedDate.year}-${ zero + n }-${ this.seletedDate.day }`;
     return dateS;
   }
 
   getNextDate() {
     const nextDay = new Date(this.searchDate());
     nextDay.setDate(nextDay.getDate() + this.stayDatevalue);
-    const next = `${nextDay.getFullYear()}/${nextDay.getMonth() + 1}/${nextDay.getDate()}`;
+    const next = `${nextDay.getFullYear()}-${nextDay.getMonth() + 1}-${nextDay.getDate()}`;
     // console.log(next);
     return next;
   }

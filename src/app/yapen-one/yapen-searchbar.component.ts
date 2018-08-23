@@ -37,7 +37,7 @@ interface Price {
     (changeStayDate)="changeStayDate($event)" (setPeriod)="setPeriod($event)"></app-searchcalendar>
   <app-theme [selectPrice]="selectPrice" [setTheme]="setTheme"
     (setPrice)="setPrice($event)" (setThemeValue)="setThemeValue($event)"
-    (changeTheme)="changeTheme($event)"></app-theme>
+    (changeTheme)="changeTheme($event)" (checkTheme)="checkTheme($event)" (checkValueTheme)="checkValueTheme($event)"></app-theme>
   <!-- 클릭 후 서치바 추가하기. -->
   <!-- 달력 넣기-->
   `,
@@ -48,7 +48,6 @@ export class YapenSearchbarComponent {
   resid = '1.001010';
   people: any = '전체';
   peoplePercent = 0;
-
   periodid = 1;
   priceid = 0;
   themeid = '스파/월풀';
@@ -58,7 +57,7 @@ export class YapenSearchbarComponent {
   @Output() basicPrice;
   @Output() selectPrice: any[];
   @Output() seletedDate: NgbDateStruct;
-  @Output() setTheme: any[];
+  @Output() setTheme: any;
   @Output() basicTheme;
 
 
@@ -147,10 +146,10 @@ export class YapenSearchbarComponent {
    }
 
 
-    changeArea(area: Area) {
-      this.res = area.name;
-      this.resid = area.sub_location_no;
-    }
+   changeArea(area: Area) {
+     this.res = area.name;
+     this.resid = area.sub_location_no;
+   }
 
    changePeople(peo: string) {
     let p = +peo;
@@ -173,6 +172,16 @@ export class YapenSearchbarComponent {
       this.seletedDate = date;
       const calendarSelectedDate = `${date.year}-0${date.month}-${date.day}`; // 2018-08-22
     }
+
+    checkTheme(value: string, checked: boolean) {
+      this.setTheme = this.setTheme.map( t => t.value === value ? Object.assign({}, t, { checked: !t.checked}) : t);
+    }
+
+    checkValueTheme(value: string, checked: boolean) {
+      this.themeid = this.setTheme.filter( t => t.checked );
+      console.log(this.themeid);
+    }
+
 
   // checkTheme(value: string) {
   //   console.log(value);
