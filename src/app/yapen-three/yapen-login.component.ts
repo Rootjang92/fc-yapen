@@ -23,12 +23,8 @@ interface Token {
         <input class="pw" type="password"
         [(ngModel)]="password"
         placeholder="비밀번호" formControlName="password"><br>
-        <button class="login" type="submit" (click)="loginView.emit()" >야놀자펜션 로그인</button><br>
+        <button class="login" type="submit" (click)="loginView.emit()" [disabled]="loginForm.invalid">야놀자펜션 로그인</button><br>
     </form>
-      <div id="user">
-        <a routerLink="/signup" (click)="ok()">회원가입</a>
-      </div>
-
       <button class="close-btn"
         *ngIf="closable" (click)="close()">X</button>
     </div>
@@ -69,7 +65,7 @@ interface Token {
       margin: 0 auto;
       width: 90%;
       max-width: 338px;
-      min-height: 340px;
+      min-height: 300px;
       background-color: #fff;
       padding: 12px;
       box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2), 0 13px 19px 2px rgba(0, 0, 0, 0.14),

@@ -111,7 +111,7 @@ interface Room {
               <span>
                 <input type="checkbox" [attr.id]="room.pk" [checked]="room.pk===checkedPk"
                 (change)="changeRoom(room.pk, selectStayNum.value, selectAdultNum.value,
-                  selectChildNum.value, selectBabyNum.value)" [disabled]="!room.status">
+                  selectChildNum.value, selectBabyNum.value)" [disabled]="room.pk===checkedPk">
                   <label [attr.for]="room.pk">{{ room.name }}</label>
               </span>
             </td>
