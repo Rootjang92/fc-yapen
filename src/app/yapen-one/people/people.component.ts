@@ -24,7 +24,7 @@ import {
   <div class="graphBar">
     <!-- 스크롤 바가 움직이면 left값과 value 값 , 텍스트 값 변경. -->
     <div class="graphBtn ui-dragge" draggable="true"
-       [ngStyle]="{ 'transform' : 'translateX('+ peoplePercent +'px)' }">2명</div>
+       [ngStyle]="{ 'transform' : 'translateX('+ peoplePercent +'px)' }"></div>
   </div>
   <div style="width: 90%; margin-left: 5%; margin-top: -18px; font-size: 12px; font-weight: 700;">
     <span style="float: left">0명</span>

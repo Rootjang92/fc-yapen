@@ -1,4 +1,5 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { StateviewService } from '../stateview.service';
 import { environment } from '../../../environments/environment';
@@ -13,7 +14,6 @@ import {
   transition
 } from '@angular/animations';
 
-
 @Component({
   selector: 'app-searchcalendar',
   template: `
@@ -22,13 +22,9 @@ import {
       <div>
         <div class="stayDay">숙박일수
           <div>
-            <select name="revDay" id="revDay">
-              <option value="1">1박2일</option>
-              <option value="2">2박3일</option>
-              <option value="3">3박4일</option>
-              <option value="4">4박5일</option>
-              <option value="5">5박6일</option>
-              <option value="6">6박7일</option>
+            <select name="revDay" id="revDay" #revDay #revDayvalue  (change)="setPeriod.emit(revDay.selectedIndex)">
+              <option *ngFor="let period of stayPeriod"  (change)="changeStayDate.emit($event.target.value)"
+                [value]="period.value">{{ period.key }}</option>
             </select>
           </div>
         </div>
@@ -71,6 +67,7 @@ import {
 })
 export class SearchcalendarComponent implements OnInit {
 
+  stayid: number;
   firstDayOfWeek = 7;
 
   selectedDate: NgbDateStruct;
@@ -79,13 +76,18 @@ export class SearchcalendarComponent implements OnInit {
 
   today: Date = new Date();
 
+  @Input() stayDate = new EventEmitter();
+  @Input() stayPeriod;
+  @Input() periodid: number;
   @Output() changeDate = new EventEmitter();
+  @Output() setPeriod = new EventEmitter();
+  @Output() setPeriodValue = new EventEmitter();
+  @Output() changeStayDate = new EventEmitter();
 
   constructor(public stateviewService: StateviewService,
               private http: HttpClient,
               calendar: NgbCalendar) {}
               // { this.selectedDate = calendar.getToday(); }
-
   ngOnInit() {
   }
 
@@ -111,7 +113,6 @@ export class SearchcalendarComponent implements OnInit {
   //   this.selectedDate = date;
   //   this.checkInDate = date;
   // }
-
 
 }
 

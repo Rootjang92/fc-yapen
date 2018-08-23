@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
@@ -17,22 +17,24 @@ export class StateviewService {
   public data: any = {};
   public res: any[];
   pensionList: any[];
-  baseUrl = 'https://api.pmb.kr/search/keyword_search/';
+  roomlist: any[];
+  baseUrl = 'https://pmb.kr/search/keyword_search/';
   queryUrl = '?search=';
-
+  url = 'https://api.pmb.kr/location/location-name';
+  location = [];
   constructor(private http: HttpClient) { }
 
-  // searchTerms(terms: Observable<string>) {
-  //   return terms.debounceTime(400)
-  //     .distinctUntilChanged()
-  //     .switchMap(term => this.search(term));
-  // }
-
-
-  // search(term) {
-  //   return this.http
-  //     .get<any[]>(this.baseUrl + this.queryUrl + term)
-  //     .map(response => this.pensionList = response);
-  // }
-
+  getLocation() {
+    this.http.get<any[]>(this.url)
+      .subscribe( res => {
+        // console.log(res);
+        this.res = res;
+          res.filter((pension, i) => {
+            if ( pension.name === '가평' || pension.name === '경기') {
+                this.location.push(pension.sublocations);
+                console.log(this.location);
+          }
+      });
+    });
+  }
 }
