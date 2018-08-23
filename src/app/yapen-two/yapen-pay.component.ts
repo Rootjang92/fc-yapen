@@ -1,7 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+interface PayMent {
+  subscriber: string;
+  phone_number: string;
+  method_of_payment: string;
+  card_number: string;
+  expiration_month: string;
+  expiration_year: string;
+  card_password: string;
+  card_type: string;
+  birth_date_of_owner: string;
+  installment_plan: string;
+  email: string;
+  deposit_bank: string;
+  depositor_name: string;
+}
 
 @Component({
   selector: 'app-yapen-pay',
@@ -257,6 +274,18 @@ import { HttpClient } from '@angular/common/http';
 
   </div>
   <!-- yapen pay page -->
+
+  <!--
+  <div>
+    <app-yapen-payfinish
+      [subscriber]="subscriber"
+      [payType]="payType"
+      >
+    </app-yapen-payfinish>
+  </div>
+  -->
+
+
   `,
   styles: [`
     .pay-page{
@@ -392,6 +421,8 @@ export class YapenPayComponent implements OnInit {
 
   // urlError = 'https://www.pmb.kr/reservation/​';
 
+
+  // get the room reserved from reserve page
   reserveRooms;
   reserveRoomPk;
   reserveRoomCheckInDate;
@@ -405,14 +436,19 @@ export class YapenPayComponent implements OnInit {
 
   ngOnInit() {
     // get the room info reserved on the reserve page from /reservation/info/
-    this.http.get(this.urlInfo)
-      .subscribe(reserveRooms => this.reserveRooms = reserveRooms);
+    // this.http.get(this.urlInfo)
+    //   .subscribe(reserveRooms => console.log(reserveRooms));
       // this.reserveRooms = [{ pk: 1, "checkin_date": "2018-08-12", ... }]
       // const reserveRoomInfo = this.reserveRooms[0]; // { pk: 1, "checkin_date": "2018-08-12", ... }
       // this.reserveRoomPk = reserveRoomInfo.pk;
       // this.reserveRoomCheckInDate = reserveRoomInfo.checkin_date;
       // this.reserveRoomStayDayNum = reserveRoomInfo.stay_day_num;
       // this.reserveRoomTotalPrice = reserveRoomInfo.total_price;
+
+      // const headers = new HttpHeaders()
+      //   .set('Content-type', 'application/json')
+      //   .set('Authorization', 'my-auth-token');
+
 
     this.userForm = this.fb.group({
       userName: ['', Validators.required],
@@ -485,6 +521,9 @@ export class YapenPayComponent implements OnInit {
     }
 
     getUserInfo(userName: string, userPhone: string) {
+      this.isEmptyName = false;
+      this.isEmptyPhone = false;
+
       this.subscriber = userName;
       this.phoneNumber = userPhone;
 
@@ -615,10 +654,20 @@ export class YapenPayComponent implements OnInit {
 
     // -- nonBankbook form implementation start --
 
-    checkBank(bankValue: string) {
+    checkBank(bankName: string) {
       console.log('bank');
-      this.depositBank = bankValue;
+      console.log(bankName);
+      bankName === '02' ? this.depositBank = '기업은행' :
+        bankName === '03' ? this.depositBank = '국민은행' : bankName === '04' ? this.depositBank = '외환은행' :
+        bankName === '05' ? this.depositBank = '우리은행' : this.depositBank = '선택';
+      console.log(this.depositBank); // 02
     }
+
+    // <option value="01" selected>선택</option>
+    // <option value="02">기업은행</option>
+    // <option value="03">국민은행</option>
+    // <option value="04">외환은행</option>
+    // <option value="05">우리은행</option>
 
     checkNonBankbook() {
       console.log('get nonbankbook info');
@@ -642,10 +691,10 @@ export class YapenPayComponent implements OnInit {
       this.owernerEmail = this.email.value;
 
       const newPayInfoCard = {
-        pk: this.reserveRoomPk,
-        checkin_date: this.reserveRoomCheckInDate,
-        stay_day_num: this.reserveRoomStayDayNum,
-        total_price: this.reserveRoomTotalPrice,
+        // pk: this.reserveRoomPk,
+        // checkin_date: this.reserveRoomCheckInDate,
+        // stay_day_num: this.reserveRoomStayDayNum,
+        // total_price: this.reserveRoomTotalPrice,
         subscriber: this.subscriber,
         phone_number: this.phoneNumber,
         method_of_payment: this.payType,
@@ -659,35 +708,78 @@ export class YapenPayComponent implements OnInit {
         email: this.owernerEmail
       };
 
-      this.postFinal(newPayInfoCard);
+      console.log(newPayInfoCard);
+
+      const headers = new HttpHeaders()
+      .set('Content-type', 'application/json')
+      .set('Authorization', 'my-auth-token');
+
+      this.http.post<PayMent>(this.urlPay, newPayInfoCard, { headers })
+      .subscribe(
+        () => {
+          alert('결제가 성공했습니다.');
+          this.router.navigate(['/payfinish']);
+          // this.getResponse(payload)
+          //   .subscribe(_data => {
+          //     this.subscriber = _data.subscriber;
+          //     console.log(this.subscriber);
+          //   });
+        },
+        error => {
+          alert('결제가 실패했습니다.');
+          console.log(this.urlInfo);
+        }
+      );
+
+      // this.postFinal(newPayInfoCard);
+
+      // return this.http.post<PayMent>(this.urlPay, newPayInfoCard);
     }
 
     postFinal(payload) {
       console.log('post final');
+      console.log(this.urlPay);
+      console.log(payload);
 
-      this.http.post(this.urlPay, payload)
-      .subscribe(
-        () => {
-          alert('결제가 성공했습니다.');
-          this.router.navigate(['payfinish']);
-        },
-        error => {
-          alert('결제가 실패했습니다.');
-        }
-      );
+      // this.http.post<PayMent>('​https://api.pmb.kr/reservation/pay/​', payload)
+      // .subscribe(
+      //   () => {
+      //     alert('결제가 성공했습니다.');
+      //     this.router.navigate(['/payfinish']);
+      //     // this.getResponse(payload)
+      //     //   .subscribe(_data => {
+      //     //     this.subscriber = _data.subscriber;
+      //     //     console.log(this.subscriber);
+      //     //   });
+      //   },
+      //   error => {
+      //     alert('결제가 실패했습니다.');
+      //     console.log(this.urlPay);
+      //   }
+      // );
+
+
+      // this.getResponse(payload);
 
     }
 
+
+    // getResponse(payload) {
+    //   console.log('response');
+    //   return this.http.post<PayMent>(this.urlPay, payload);
+    // }
+
     postNonBankbookInfo() {
       console.log('post nonBankbook');
+      if (this.depositBank === '선택') { return; }
 
       this.depositorName = this.depositUserName.value;
 
       const newPayInfoNonBankbook = {
-        pk: this.reserveRoomPk,
-        checkin_date: this.reserveRoomCheckInDate,
-        stay_day_num: this.reserveRoomStayDayNum,
-        total_price: this.reserveRoomTotalPrice,
+        // pk: this.reserveRoomPk,
+        // checkin_date: this.reserveRoomCheckInDate,
+        // stay_day_num: this.reserveRoomStayDayNum,
+        // total_price: this.reserveRoomTotalPrice,
         subscriber: this.subscriber,
         phone_number: this.phoneNumber,
         method_of_payment: this.payType,
@@ -695,18 +787,12 @@ export class YapenPayComponent implements OnInit {
         depositor_name: this.depositorName
       };
 
-      this.postFinal(newPayInfoNonBankbook);
+      // this.postFinal(newPayInfoNonBankbook);
 
     }
 
 
     // -- post pay info implementation end --
-
-
-    moveToFinishPage() {
-      console.log('move');
-      this.router.navigate(['payfinish']);
-    }
 
 
 }
