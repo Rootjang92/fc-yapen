@@ -114,7 +114,7 @@ export class ConditionComponent implements OnInit {
     const conditionSearchUrl = 'https://api.pmb.kr/search/button_search/?'
       + 'sub_location_no=' + this.resid + '&max_num_people=' + this.people +
         '&price_range=' + this.basicPrice.value + '&checkin_date=' + this.searchDate() + '&'
-        + 'stay_day_num=' + this.stayDatevalue + '&theme=' + this.themeid;
+        + 'stay_day_num=' + this.stayDatevalue + '&theme=' + `${this.themeid}`;
     console.log(conditionSearchUrl);
     this.http.get<any[]>(conditionSearchUrl)
       .subscribe( res => {
