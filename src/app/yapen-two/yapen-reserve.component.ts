@@ -112,11 +112,12 @@ interface Room {
               <span>
                 <input type="checkbox" [attr.id]="room.pk" [checked]="room.pk===checkedPk"
                 (change)="changeRoom(room.pk, selectStayNum.value, selectAdultNum.value,
-                  selectChildNum.value, selectBabyNum.value)" [disabled]="!room.status">
+                  selectChildNum.value, selectBabyNum.value)" [disabled]="!room.status || room.pk===checkedPk">
+                  <!-- !room.status || room.pk===checkedPk -->
                   <label [attr.for]="room.pk">{{ room.name }}</label>
               </span>
             </td>
-            <td><button type="button" class="btn btn-{{ room.status ? 'danger' : 'success'}} btn-sm">
+            <td><button type="button" class="btn btn-{{ room.status ? 'success' : 'danger'}} btn-sm">
               {{ room.status ? '예약가능': '예약완료' }}</button></td>
             <td>{{ room.size }}, {{ room.normal_num_poeple }}명 / {{ room.max_num_people }}명</td>
             <td>
@@ -192,9 +193,9 @@ interface Room {
       <div class="total-price" *ngIf="rooms">
         <p>
           <b>결제금액:</b>
-          <strong>{{ totalPrice }}원</strong>
+          <strong>{{ totalPrice + extraChargeTotal }}원</strong>
         </p>
-        <span>{{ extraChargeTotal ? '현장결제:' + extraChargeTotal + '원': '' }}</span>
+        <!-- <span>{{ extraChargeTotal ? '현장결제:' + extraChargeTotal + '원': '' }}</span> -->
       </div>
       <!-- total price for the room selected -->
 
@@ -374,7 +375,10 @@ export class YapenReserveComponent implements OnInit {
 
   totalPrice = 0;
 
-  extraChargeTotal = 0;
+  extraChargeTotal;
+  extraChargeAdult = 0;
+  extraChargeChild = 0;
+  extraChargeBaby = 0;
 
   pensionName: string;
 
@@ -411,6 +415,7 @@ export class YapenReserveComponent implements OnInit {
       this.adultNum = checkedRoom.normal_num_poeple;
 
       this.totalPrice = checkedRoom.price;
+      this.getExtraCharge();
   });
 }
 
@@ -423,6 +428,8 @@ export class YapenReserveComponent implements OnInit {
     const calendarSelectedDate = `${date.year}-0${date.month}-${date.day}`; // 2018-08-20
     this.http.get<Pension>(`${this.urlDate}/${this.pensionPk}/${calendarSelectedDate}/`)
       .subscribe(pension => this.rooms = pension.rooms);
+
+    // checkedRoom.status === false ? checkedRoom.pk = !this.checkedPk;
   }
 
   // get weekday(요일) as string
@@ -490,8 +497,12 @@ export class YapenReserveComponent implements OnInit {
 
     if (selectedAdultNum > checkedRoom.normal_num_poeple) {
       const _extraChargeAdult = (selectedAdultNum - checkedRoom.normal_num_poeple) * (checkedRoom.extra_charge_adult);
-      this.extraChargeTotal += _extraChargeAdult;
+      this.extraChargeAdult = _extraChargeAdult;
+    } else if (selectedAdultNum <= checkedRoom.normal_num_poeple) {
+      this.extraChargeAdult = 0;
     }
+
+    this.getExtraCharge();
   }
 
   selectChild(selectedChildNum: number) {
@@ -499,11 +510,14 @@ export class YapenReserveComponent implements OnInit {
     this.exceedAlert();
 
     const checkedRoom = this.rooms.filter(room => room.pk === this.checkedPk)[0];
-
     if (selectedChildNum > 0) { // 3명 > 2명
       const _extraChargeChild = (selectedChildNum) * (checkedRoom.extra_charge_child);
-      this.extraChargeTotal += _extraChargeChild;
+      this.extraChargeChild = _extraChargeChild;
+    } else {
+      this.extraChargeChild = 0;
     }
+
+    this.getExtraCharge();
   }
 
   selectBaby(selectedBabyNum: number) {
@@ -514,8 +528,17 @@ export class YapenReserveComponent implements OnInit {
 
     if (selectedBabyNum > 0) { // 3명 > 2명
       const _extraChargeBaby = (selectedBabyNum) * (checkedRoom.extra_charge_baby);
-      this.extraChargeTotal += _extraChargeBaby;
+      this.extraChargeBaby = _extraChargeBaby;
+    } else {
+      this.extraChargeBaby = 0;
     }
+
+    this.getExtraCharge();
+  }
+
+  getExtraCharge() {
+    console.log('extra');
+    this.extraChargeTotal = this.extraChargeAdult + this.extraChargeChild + this.extraChargeBaby;
   }
 
   roomStatusAlert() {
@@ -578,6 +601,7 @@ export class YapenReserveComponent implements OnInit {
           () => {
             alert('예약이 성공했습니다.');
             this.router.navigate(['pay']);
+            console.log(this.urlInfo);
           },
           error => {
             alert('예약이 실패되었습니다.');
@@ -588,6 +612,7 @@ export class YapenReserveComponent implements OnInit {
   // add a room selected to reservation database
   addReserveRoom() {
     const checkedRoom = this.rooms.filter(room => room.pk === this.checkedPk)[0];
+    if (!checkedRoom.status) { return alert('예약완료는 예약이 불가능합니다.'); }
     const totalNum = Number(this.adultNum) + Number(this.childNum) + Number(this.babyNum);
 
     if (checkedRoom.max_num_people < totalNum) {

@@ -24,10 +24,10 @@ export class YapenSearchbarComponent {
    }
 
 
-   changeArea(area: Area) {
-     this.res = area.name;
-     this.resid = area.sub_location_no;
-   }
+  //  changeArea(area: Area) {
+  //    this.res = area.name;
+  //    this.resid = area.sub_location_no;
+  //  }
 
    changePeople(peo: string) {
     let p = +peo;
