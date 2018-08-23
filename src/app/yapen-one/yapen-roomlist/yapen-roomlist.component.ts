@@ -17,8 +17,11 @@ import { map, filter, scan, tap } from 'rxjs/operators';
           <table cellpadding="0" cellspacing="0" class="yapen-pensionTbl" *ngFor="let room of roomlist;">
             <tbody>
               <tr>
-                <td class="yapen-pensionImageLayer" onclick="pensionView" data-id="{{ room.pk }}">
+                <td class="yapen-pensionImageLayer" data-id="{{ room.pk }}">
+                <!-- onclick="pensionView" -->
+                <a [routerLink]="['/reserve/', room.pk, '2018-08-23']">
                   <img src="{{ room.pensionimages[0].pension_image }}" class="yapen-pensionImage">
+                </a>
                   <div class="yapen-pensionName">{{ room.name }}</div>
                 </td>
                 <td class="yapen-pensionRoomLayer">

@@ -275,15 +275,16 @@ interface PayMent {
   </div>
   <!-- yapen pay page -->
 
-  <!--
-  <div>
+
+
     <app-yapen-payfinish
+      [style.display]=""
       [subscriber]="subscriber"
       [payType]="payType"
       >
     </app-yapen-payfinish>
-  </div>
-  -->
+
+
 
 
   `,
@@ -401,7 +402,7 @@ export class YapenPayComponent implements OnInit {
 
   isBank = false;
 
-  subscriber;
+  subscriber = '';
   phoneNumber;
   depositBank = '선택';
   isEmptyDepositName = false;
@@ -415,7 +416,8 @@ export class YapenPayComponent implements OnInit {
 
   depositorName;
 
-  urlPay = '​https://api.pmb.kr/reservation/pay/​';
+
+  urlPay = 'https://api.pmb.kr/reservation/pay/';
 
   urlInfo = 'https://api.pmb.kr/reservation/info/';
 
@@ -691,10 +693,10 @@ export class YapenPayComponent implements OnInit {
       this.owernerEmail = this.email.value;
 
       const newPayInfoCard = {
-        // pk: this.reserveRoomPk,
-        // checkin_date: this.reserveRoomCheckInDate,
-        // stay_day_num: this.reserveRoomStayDayNum,
-        // total_price: this.reserveRoomTotalPrice,
+        pk: '1',
+        checkin_date: '2018-08-23',
+        stay_day_num: '4',
+        total_price: '4000000',
         subscriber: this.subscriber,
         phone_number: this.phoneNumber,
         method_of_payment: this.payType,
@@ -712,28 +714,38 @@ export class YapenPayComponent implements OnInit {
 
       const headers = new HttpHeaders()
       .set('Content-type', 'application/json')
-      .set('Authorization', 'my-auth-token');
+      .set('Authorization', 'Token ' + localStorage.getItem('key'));
 
       this.http.post<PayMent>(this.urlPay, newPayInfoCard, { headers })
       .subscribe(
-        () => {
+        data => {
           alert('결제가 성공했습니다.');
           this.router.navigate(['/payfinish']);
+          this.getPayInfo();
           // this.getResponse(payload)
           //   .subscribe(_data => {
           //     this.subscriber = _data.subscriber;
           //     console.log(this.subscriber);
           //   });
+          this.subscriber = data.subscriber;
         },
         error => {
           alert('결제가 실패했습니다.');
           console.log(this.urlInfo);
+          console.log({headers});
         }
       );
+
+
 
       // this.postFinal(newPayInfoCard);
 
       // return this.http.post<PayMent>(this.urlPay, newPayInfoCard);
+    }
+
+    getPayInfo() {
+      console.log('service');
+
     }
 
     postFinal(payload) {
