@@ -29,6 +29,7 @@ import { FormsModule } from '@angular/forms';
           <ul>
             <li *ngFor="let themes of setTheme">
               <input type="checkbox" name="schTheme" [value]="themes.value" [checked]="themes.checked"
+                (change)="checkTheme.emit($event.target.value)" (change)="checkValueTheme.emit($event.target.value)"
                  (change)="changeTheme.emit($event.target.value)" (change)="checkedTheme.emit($event.target.value)">
               <label for="themes{{ themes.value }}">{{ themes.key }}</label>
             </li>
@@ -63,6 +64,8 @@ export class ThemeComponent implements OnInit {
   @Output() changePrice = new EventEmitter();
   @Output() changeTheme = new EventEmitter();
   @Output() checkedTheme = new EventEmitter();
+  @Output() checkTheme = new EventEmitter();
+  @Output() checkValueTheme = new EventEmitter();
 
   constructor(public stateviewService: StateviewService) { }
 
