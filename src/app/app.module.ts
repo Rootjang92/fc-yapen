@@ -24,6 +24,7 @@ import { YapenHeaderComponent } from './yapen-header.component';
 import { YapenFooterComponent } from './yapen-footer.component';
 import { YapenContainerComponent } from './yapen-container.component';
 
+import { SearchcalendarComponent } from './yapen-one/searchcalendar/searchcalendar.component';
 import { LocalComponent } from './yapen-one/local/local.component';
 import { PeopleComponent } from './yapen-one/people/people.component';
 import { ThemeComponent } from './yapen-one/theme/theme.component';
@@ -31,6 +32,7 @@ import { ConditionComponent } from './yapen-one/condition/condition.component';
 import { YapenRoomlistComponent } from './yapen-one/yapen-roomlist/yapen-roomlist.component';
 import { SlideComponent } from './yapen-one/slide/slide.component';
 import { RangeDirective } from './range.directive';
+import { MomentModule } from 'angular2-moment';
 
 const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
@@ -70,6 +72,7 @@ const routes: Routes = [
     ConditionComponent,
     YapenRoomlistComponent,
     SlideComponent,
+    SearchcalendarComponent
   ],
   imports: [
     BrowserModule,
@@ -82,7 +85,8 @@ const routes: Routes = [
     LocalStorageModule.withConfig({
       prefix: 'yapen',
       storageType: 'localStorage'
-    })
+    }),
+    MomentModule
   ],
   providers: [],
   bootstrap: [AppComponent]
