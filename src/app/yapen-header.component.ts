@@ -6,7 +6,6 @@ import { Router } from '../../node_modules/@angular/router';
   template: `
     <app-yapen-login (loginView)="loginView($event)" [(visible)]="visible"></app-yapen-login>
     <app-yapen-signup [(visible2)]="visible2"></app-yapen-signup>
-
     <div class="yapenGuideHead">
       <div class="headLayer">
       <a (click)="visible2=!visible2">
@@ -26,6 +25,7 @@ import { Router } from '../../node_modules/@angular/router';
         <a routerLink="/main">
           <img src="http://image2.yanolja.com/pension/new/yapen.png" alt="야놀자펜션" class="yapenLogo" /></a>
         </div>
+    <app-yapen-searchbar></app-yapen-searchbar>
     `,
   styles: [`
   .yapenHeader .topLayer {
@@ -61,5 +61,4 @@ export class YapenHeaderComponent {
     localStorage.setItem('key', event);
     this.token = localStorage.getItem('key');
   }
-
 }
