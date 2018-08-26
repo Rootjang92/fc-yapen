@@ -7,7 +7,7 @@ import { map, filter, scan, tap } from 'rxjs/operators';
 import { forEach } from '@angular/router/src/utils/collection';
 import { MomentModule } from 'angular2-moment';
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
-
+import { Router, ActivatedRoute } from '../../../../node_modules/@angular/router';
 
 @Component({
   selector: 'app-condition',
@@ -53,7 +53,7 @@ import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ConditionComponent implements OnInit {
   @Input() res: any[];
-  @Input() resid: number;
+  @Input() resid: any;
   @Input() people = '전체';
   @Input() periodid: number;
   @Input() priceid: number;
@@ -70,16 +70,24 @@ export class ConditionComponent implements OnInit {
   @Input() setTheme;
   @Input() basicTheme;
   location = [];
-
+  // checkin_date = this.searchDate();
+  // router.url = + 'sub_location_no=' + this.resid + '&max_num_people=' + this.people +
+  // '&price_range=' + this.basicPrice.value + '&checkin_date=' + this.searchDate() + '&'
+  // + 'stay_day_num=' + this.stayDatevalue + '&theme=' + `${this.themeid}`;
 
   constructor(public stateviewService: StateviewService,
               private http: HttpClient,
-              calendar: NgbCalendar) { }
+              calendar: NgbCalendar,
+              private router: Router,
+              private route: ActivatedRoute) { }
 
   ngOnInit() {
-    // this.date = this.seletedDate.day;
-    // this.date.setDate( this.date.getDate() + this.stayDatevalue );
-    // console.log(this.date);
+    // this.resid = this.route.snapshot.paramMap.get('id');
+    // this.people = this.route.snapshot.paramMap.get('people');
+    // this.basicPrice.value = this.route.snapshot.paramMap.get('basicPrice');
+    // this.seletedDate = this.route.snapshot.paramMap.get('date');
+    // this.stayDatevalue = this.route.snapshot.paramMap.get('stay');
+    // this.themeid = this.route.snapshot.paramMap.get('theme');
   }
 
   toggle(state: string) {
@@ -92,13 +100,13 @@ export class ConditionComponent implements OnInit {
 
 
   searchDate() {
-    let zero = '';
-    const n = this.seletedDate.month;
-    const m = this.seletedDate.day;
-    if ( n < 10) {
-      zero += 0;
-    }
-    const dateS = `${this.seletedDate.year}-${ zero + n }-${ this.seletedDate.day }`;
+    // let zero = '';
+    // const n = this.seletedDate.month;
+    // const m = this.seletedDate.day;
+    // if ( n < 10) {
+    //   zero += 0;
+    // }
+    const dateS = `${this.seletedDate.year}-${ this.seletedDate.month }-${ this.seletedDate.day }`;
     return dateS;
   }
 
@@ -111,13 +119,14 @@ export class ConditionComponent implements OnInit {
   }
 
   searchRoom() {
-    const conditionSearchUrl = 'https://api.pmb.kr/search/button_search/?'
-      + 'sub_location_no=' + this.resid + '&max_num_people=' + this.people +
+    const subUrl = 'sub_location_no=' + this.resid + '&max_num_people=' + this.people +
         '&price_range=' + this.basicPrice.value + '&checkin_date=' + this.searchDate() + '&'
-        + 'stay_day_num=' + this.stayDatevalue + '&theme=' + `${this.themeid}`;
+        + 'stay_day_num=' + this.stayDatevalue + '&theme=' + this.themeid;
+    const conditionSearchUrl = 'https://api.pmb.kr/search/button_search/?' + subUrl;
     console.log(conditionSearchUrl);
     this.http.get<any[]>(conditionSearchUrl)
       .subscribe( res => {
+        this.router.navigate(['/roomlist']);
         this.stateviewService.roomlist = res;
       });
   }
