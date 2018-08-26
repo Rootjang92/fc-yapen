@@ -1,7 +1,8 @@
 .slideWrapper {
   float: left;
-  width: 800px;
+  width: 750px;
   height: 304px;
+  margin-top: 15px;
 }
 .slideWrapper img {
   width: 100%;
@@ -9,7 +10,9 @@
 
 .imgWrapper {
   float: right;
-  width: 446px;
+  margin-top: 15px;
+  margin-right: 5px;
+  width: 440px;
   height: 304px;
 }
 
