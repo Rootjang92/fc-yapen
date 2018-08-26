@@ -46,7 +46,7 @@ interface Price {
 export class YapenSearchbarComponent {
   res = '양평';
   resid = '1.001010';
-  people: any = '전체';
+  people: any = 2;
   peoplePercent = 0;
   periodid = 1;
   priceid = 0;
