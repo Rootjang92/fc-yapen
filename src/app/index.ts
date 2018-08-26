@@ -1,5 +1,6 @@
 export * from './yapen-container.component';
 export * from './yapen-one/yapen-pensionlist.component';
+export * from './yapen-one/yapen-roomlist/yapen-roomlist.component';
 export * from './yapen-two/yapen-pay.component';
 export * from './yapen-two/yapen-payfinish.component';
 export * from './yapen-two/yapen-pensiondetail.component';
