@@ -79,6 +79,7 @@ export class YapenNavComponent implements OnInit {
     localStorage.setItem('key', event);
     this.token = localStorage.getItem('key');
   }
+
   search(value: string) {
     console.log(value);
     const baseUrl = 'https://api.pmb.kr/search/keyword_search/?search=' + value;
