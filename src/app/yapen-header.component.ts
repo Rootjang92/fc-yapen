@@ -13,6 +13,7 @@ import { Router } from '../../node_modules/@angular/router';
           <app-yapen-nav></app-yapen-nav>
         </div>
         <app-yapen-searchbar></app-yapen-searchbar>
+        <app-slide></app-slide>
     `,
   styles: [`
   .yapenHeader .topLayer {
