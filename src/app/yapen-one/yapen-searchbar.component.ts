@@ -1,4 +1,3 @@
-
 import { Component, OnInit, Output, setTestabilityGetter } from '@angular/core';
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 
@@ -38,6 +37,7 @@ interface Price {
   <app-theme [selectPrice]="selectPrice" [setTheme]="setTheme"
     (setPrice)="setPrice($event)" (setThemeValue)="setThemeValue($event)"
     (changeTheme)="changeTheme($event)" (checkTheme)="checkTheme($event)" (checkValueTheme)="checkValueTheme($event)"></app-theme>
+    <app-slide></app-slide>
   <!-- 클릭 후 서치바 추가하기. -->
   <!-- 달력 넣기-->
   `,
